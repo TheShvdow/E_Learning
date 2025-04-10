@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/postgres"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL_POSTGRES")
+}
+
+model User {
+  id          String       @id @default(uuid()) @db.Uuid
+  nom         String
+  prenom      String
+  username    String       @unique
+  email       String       @unique
+  password    String
+  role        Role         @default(APPRENANT)
+  createdAt   DateTime     @default(now())
+  certificats Certificat[]
+}
+
+model Formation {
+  id           Int        @id @default(autoincrement())
+  nomFormation String
+  description  String
+  photo        String
+  tutorials    Tutorial[]
+}
+
+model Tutorial {
+  id              Int          @id @default(autoincrement())
+  titreTuto       String
+  descriptionTuto String
+  photo           String
+  formationId     Int
+  formation       Formation    @relation(fields: [formationId], references: [id])
+  cours           Cours[]
+  certificats     Certificat[]
+}
+
+model Cours {
+  id         Int      @id @default(autoincrement())
+  titreCours String
+  content    String
+  photo      String
+  tutorialId Int
+  tutorial   Tutorial @relation(fields: [tutorialId], references: [id])
+}
+
+model Certificat {
+  id            Int      @id @default(autoincrement())
+  titre         String
+  apprenantId   String   @db.Uuid
+  tutorialId    Int
+  dateObtention DateTime @default(now())
+  user          User     @relation(fields: [apprenantId], references: [id])
+  tutorial      Tutorial @relation(fields: [tutorialId], references: [id])
+}
+
+enum Role {
+  ADMIN
+  FORMATEUR
+  APPRENANT
+}
