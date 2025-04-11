@@ -16,6 +16,7 @@ const wrap = (fn: AsyncHandler) => {
 router.post('/register', wrap(UserController.register));
 router.post('/login', wrap(UserController.login));
 router.get('/me', isAuthenticated, wrap(UserController.me));
+router.get('/me/full', isAuthenticated, wrap(UserController.getFullUser));
 router.post('/logout', isAuthenticated, wrap(UserController.logout));
 
 router.get('/admin', isAuthenticated, hasRole('ADMIN'), (req, res) => {

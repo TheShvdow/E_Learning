@@ -6,5 +6,7 @@ export interface IUser {
     username: string;
     password: string;
     role : string;
+    avatar?: string;
+    bio?: string;
   }
   

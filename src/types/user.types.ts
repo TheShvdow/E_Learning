@@ -6,6 +6,8 @@ export interface IBaseUser {
   password: string;
   username: string;
   role: string;
+  avatar: string;
+  bio: string;
 }
 
 export interface IPostgresUser extends IBaseUser {

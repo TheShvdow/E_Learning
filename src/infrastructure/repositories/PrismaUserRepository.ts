@@ -19,9 +19,46 @@ export const PrismaUserRepository: IUserRepository = {
     return prisma.user.findUnique({ where: { id } });
   },
 
+  //findAll with relations for each user
   findAll: async () => {
-    return prisma.user.findMany();
+    return prisma.user.findMany({
+      include: {
+        certificats: {
+          include: {
+            tutorial: {
+              include: {
+                formation: true,
+              },
+            },
+          },
+        },
+        enrollments: {
+          include: {
+            tutorial: {
+              include: {
+                formation: true,
+              },
+            },
+          },
+        },
+        coursProgresses: {
+          include: {
+            cours: {
+              include: {
+                tutorial: {
+                  include: {
+                    formation: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
   },
+
+
 
   update: async (id: string, data: Prisma.UserUpdateInput) => {
     return prisma.user.update({
@@ -30,14 +67,52 @@ export const PrismaUserRepository: IUserRepository = {
     });
   },
 
-  delete: async (id) => {
+  delete: async (id : string) => {
     await prisma.user.delete({ where: { id } });
   },
 
-  updatePassword: async (id, hashedPassword) => {
+  updatePassword: async (id : string, hashedPassword: string) => {
     await prisma.user.update({
       where: { id },
       data: { password: hashedPassword },
     });
   },
+
+  findByIdWithRelations: async (id: string) => {
+    return prisma.user.findUnique({
+      where: { id },
+      include: {
+        certificats: {
+          include: {
+            tutorial: {
+              include: {
+                formation: true
+              }
+            }
+          }
+        },
+        enrollments: {
+          include: {
+            tutorial: {
+              include: {
+                formation: true
+              }
+            }
+          }
+        },
+        coursProgresses: {
+          include: {
+            cours: {
+              include: {
+                tutorial: {
+                  include: { formation: true }
+                }
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
 };

@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import { userSchema, userLoginSchema } from '../../../validators/user.validator';
 import { PrismaUserRepository } from '../../repositories/PrismaUserRepository';
 import { UserService } from '../../../core/user/UserService';
+import { UserMapper } from '../../web/mappers/UserMapper';
+
 
 const service = UserService(PrismaUserRepository);
 
@@ -29,8 +31,9 @@ export class UserController {
       nom: user.nom,
       prenom: user.prenom,
       email: user.email,
+      username: user.username,
       role: user.role,
-      
+      avatar: user.avatar || ''
     };
 
     req.session.save((err) => {
@@ -56,4 +59,16 @@ export class UserController {
     const users = await service.getAllUsers();
     res.json(users);
   }
+
+  static async getFullUser(req: Request, res: Response) {
+  if (!req.session.user) return res.status(401).json({ message: 'Non authentifié' });
+
+  const fullUser = await service.getFullUserById(req.session.user.id);
+  if (!fullUser) return res.status(404).json({ message: 'Utilisateur non trouvé' });
+
+  const dto = UserMapper.toFullDTO(fullUser);
+  res.json(dto);
+}
+
+  
 }

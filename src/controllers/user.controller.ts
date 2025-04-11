@@ -31,7 +31,16 @@ export class UserController {
     if (!user) return res.status(401).json({ message: 'Invalid credentials' });
     
     // Définir la session avec un callback
-    req.session.user = user;
+    req.session.user = {
+      id: user.id,
+      nom: user.nom,
+      prenom: user.prenom,
+      email: user.email,
+      username: user.username,
+      role: user.role,
+      avatar: user.avatar || '',
+      bio: user.bio || '',
+    }
     req.session.save((err) => {
       if (err) {
         return res.status(500).json({ message: 'Error saving session' });

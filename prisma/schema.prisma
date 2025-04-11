@@ -9,15 +9,20 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid()) @db.Uuid
-  nom       String
-  prenom    String
-  username  String  @unique
-  email     String  @unique
-  password  String
-  role      Role     @default(APPRENANT)
-  createdAt DateTime @default(now())
-  certificats Certificat[]
+  id              String          @id @default(uuid()) @db.Uuid
+  nom             String
+  prenom          String
+  avatar          String?
+  bio             String?
+  username        String          @unique
+  email           String          @unique
+  password        String
+  role            Role            @default(APPRENANT)
+  createdAt       DateTime        @default(now())
+  certificats     Certificat[]
+  enrollments     Enrollment[]
+  coursProgresses CoursProgress[]
+  commentaires    Commentaire[]
 }
 
 model Formation {
@@ -29,29 +34,32 @@ model Formation {
 }
 
 model Tutorial {
-  id             Int      @id @default(autoincrement())
-  titreTuto      String
+  id              Int           @id @default(autoincrement())
+  titreTuto       String
   descriptionTuto String
-  photo          String
-  formationId    Int
-  formation      Formation @relation(fields: [formationId], references: [id])
-  cours          Cours[]
-  certificats    Certificat[]
+  photo           String
+  formationId     Int
+  formation       Formation     @relation(fields: [formationId], references: [id])
+  cours           Cours[]
+  certificats     Certificat[]
+  enrollments     Enrollment[]
+  commentaires    Commentaire[]
 }
 
 model Cours {
-  id         Int     @id @default(autoincrement())
-  titreCours String
-  content    String
-  photo      String
-  tutorialId Int
-  tutorial   Tutorial @relation(fields: [tutorialId], references: [id])
+  id              Int             @id @default(autoincrement())
+  titreCours      String
+  content         String
+  photo           String
+  tutorialId      Int
+  tutorial        Tutorial        @relation(fields: [tutorialId], references: [id])
+  coursProgresses CoursProgress[]
 }
 
 model Certificat {
   id            Int      @id @default(autoincrement())
   titre         String
-  apprenantId   String  @db.Uuid
+  apprenantId   String   @db.Uuid
   tutorialId    Int
   dateObtention DateTime @default(now())
   user          User     @relation(fields: [apprenantId], references: [id])
@@ -62,4 +70,41 @@ enum Role {
   ADMIN
   FORMATEUR
   APPRENANT
+}
+
+model Enrollment {
+  id         Int      @id @default(autoincrement())
+  userId     String   @db.Uuid
+  tutorialId Int
+  enrolledAt DateTime @default(now())
+  progress   Int      @default(0)
+
+  user     User     @relation(fields: [userId], references: [id])
+  tutorial Tutorial @relation(fields: [tutorialId], references: [id])
+
+  @@unique([userId, tutorialId])
+}
+
+model CoursProgress {
+  id        Int      @id @default(autoincrement())
+  userId    String   @db.Uuid
+  coursId   Int
+  completed Boolean  @default(false)
+  viewedAt  DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id])
+  cours Cours @relation(fields: [coursId], references: [id])
+
+  @@unique([userId, coursId])
+}
+
+model Commentaire {
+  id         Int      @id @default(autoincrement())
+  contenu    String
+  userId     String   @db.Uuid
+  tutorialId Int
+  createdAt  DateTime @default(now())
+
+  user     User     @relation(fields: [userId], references: [id])
+  tutorial Tutorial @relation(fields: [tutorialId], references: [id])
 }

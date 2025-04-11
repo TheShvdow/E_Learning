@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import { IUser } from '../../domain/user/IUser';
 import { IUserRepository } from '../../domain/user/UserRepositoryInterface';
 import { Role } from '../../../prisma/generated/postgres'; // adapte le chemin selon ton projet
+import { PrismaUserRepository } from '../../infrastructure/repositories/PrismaUserRepository';
 
 
 export const UserService = (userRepo: IUserRepository) => ({
@@ -36,4 +37,10 @@ export const UserService = (userRepo: IUserRepository) => ({
   async getAllUsers() {
     return userRepo.findAll();
   },
+  
+  getFullUserById: (id: string) => {
+    return PrismaUserRepository.findByIdWithRelations(id);
+  }
+  
+  
 });

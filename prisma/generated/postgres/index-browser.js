@@ -121,6 +121,8 @@ exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
   nom: 'nom',
   prenom: 'prenom',
+  avatar: 'avatar',
+  bio: 'bio',
   username: 'username',
   email: 'email',
   password: 'password',
@@ -159,6 +161,30 @@ exports.Prisma.CertificatScalarFieldEnum = {
   dateObtention: 'dateObtention'
 };
 
+exports.Prisma.EnrollmentScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  tutorialId: 'tutorialId',
+  enrolledAt: 'enrolledAt',
+  progress: 'progress'
+};
+
+exports.Prisma.CoursProgressScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  coursId: 'coursId',
+  completed: 'completed',
+  viewedAt: 'viewedAt'
+};
+
+exports.Prisma.CommentaireScalarFieldEnum = {
+  id: 'id',
+  contenu: 'contenu',
+  userId: 'userId',
+  tutorialId: 'tutorialId',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -167,6 +193,11 @@ exports.Prisma.SortOrder = {
 exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
+};
+
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
 };
 exports.Role = exports.$Enums.Role = {
   ADMIN: 'ADMIN',
@@ -179,7 +210,10 @@ exports.Prisma.ModelName = {
   Formation: 'Formation',
   Tutorial: 'Tutorial',
   Cours: 'Cours',
-  Certificat: 'Certificat'
+  Certificat: 'Certificat',
+  Enrollment: 'Enrollment',
+  CoursProgress: 'CoursProgress',
+  Commentaire: 'Commentaire'
 };
 
 /**

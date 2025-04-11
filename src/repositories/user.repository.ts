@@ -16,7 +16,21 @@ export const userRepository = {
   },
 
   findById: async (id: string) => {
-    return await prisma.user.findUnique({ where: { id } });
+    return await prisma.user.findUnique({ 
+      where: { id },
+      include: {
+        certificats : {
+          include: {
+            tutorial: {
+              include: {
+                formation: true,
+              },
+            },
+          },
+        },
+      },  
+    });
+     
   },
 
   findAll: async () => {

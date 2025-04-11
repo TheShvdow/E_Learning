@@ -8,6 +8,7 @@ export const userSchema = z.object({
   email: z.string().email().toLowerCase(),
   password: z.string().min(8),
   role: z.enum(['ADMIN', 'APPRENANT', 'FORMATEUR']).default('APPRENANT'),
+  avatar: z.string().optional(),
 });
 export const userUpdateSchema = z.object({
   id: z.string().uuid(),
@@ -17,6 +18,7 @@ export const userUpdateSchema = z.object({
   email: z.string().email().optional(),
   password: z.string().min(8).optional(),
   role: z.enum(['ADMIN', 'APPRENANT', 'FORMATEUR']).optional(),
+  photo: z.string().optional(),
 });
 
 // This schema is used for login, so we don't need the role

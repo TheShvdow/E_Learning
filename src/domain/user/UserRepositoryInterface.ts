@@ -9,4 +9,5 @@ export interface IUserRepository {
   update(id: string, data: Prisma.UserUpdateInput): Promise<any>;
   delete(id: string): Promise<void>;
   updatePassword(id: string, hashedPassword: string): Promise<void>;
+  findByIdWithRelations(id: string): Promise<any | null>;
 }
