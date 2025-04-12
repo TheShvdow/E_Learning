@@ -17,6 +17,8 @@ const wrap = (fn: Function): RequestHandler => {
 
 router.get('/', wrap(TutorialController.getAll));
 router.get('/:id', wrap(TutorialController.getById));
+router.get('/formation/:formationId', wrap(TutorialController.getByFormationId));
+
 
 // 🔐 Réservé au formateur
 router.post('/create', isAuthenticated, hasRole('FORMATEUR'), wrap(TutorialController.create));

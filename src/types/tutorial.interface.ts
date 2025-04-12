@@ -5,4 +5,6 @@ export interface ITutorial {
     descriptionTuto: string;
     photo: string;
     formationId: number;
+    
+    
   }

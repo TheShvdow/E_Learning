@@ -9,5 +9,10 @@ export const ProgressService = {
 
   getProgress: (userId: string, tutorialId: number) =>
     ProgressRepository.getTutorialProgress(userId, tutorialId),
+
+  isEnrolled: (userId: string, tutorialId: number) =>
+    ProgressRepository.isEnrolled(userId, tutorialId),
+  
 };
+
 

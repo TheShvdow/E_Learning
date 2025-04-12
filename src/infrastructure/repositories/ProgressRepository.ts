@@ -24,5 +24,12 @@ export const ProgressRepository = {
     });
     const percent = total === 0 ? 0 : Math.round((completed / total) * 100);
     return { total, completed, percent };
+  },
+  isEnrolled: async (userId: string, tutorialId: number) => {
+    const enrollment = await prisma.enrollment.findUnique({
+      where: { userId_tutorialId: { userId, tutorialId } }
+    });
+    return Boolean(enrollment);
   }
+  
 };

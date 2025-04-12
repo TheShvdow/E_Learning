@@ -33,7 +33,8 @@ export class UserController {
       email: user.email,
       username: user.username,
       role: user.role,
-      avatar: user.avatar || ''
+      avatar: user.avatar || '',
+      bio : user.bio || ''
     };
 
     req.session.save((err) => {

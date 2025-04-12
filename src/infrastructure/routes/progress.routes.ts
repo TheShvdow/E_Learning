@@ -16,5 +16,7 @@ const wrap = (fn: AsyncHandler) => {
 router.post('/enroll', isAuthenticated, wrap(ProgressController.enroll));
 router.post('/complete', isAuthenticated, wrap(ProgressController.complete));
 router.get('/progress', isAuthenticated, wrap(ProgressController.getProgress));
+router.get('/enrolled/:tutorialId', isAuthenticated, wrap(ProgressController.checkEnrollment));
+
 
 export default router;

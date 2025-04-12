@@ -27,4 +27,10 @@ export class TutorialController {
     await tutorialService.delete(Number(req.params.id));
     res.status(204).send();
   }
+
+  static async getByFormationId(req: Request, res: Response) {
+    const formationId = parseInt(req.params.formationId, 10);
+    const tutorials = await tutorialService.getByFormationId(formationId);
+    res.json(tutorials);
+  }
 }

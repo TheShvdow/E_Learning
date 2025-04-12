@@ -20,4 +20,8 @@ Content-Type: application/json
 }
 
 ### test Auth
-GET http://localhost:8000/debug
+GET http://localhost:8000/api/v1/tutorials
+Content-Type: application/json
+
+### tutorials + cours
+GET http://localhost:8000/api/v1/tutorials/33

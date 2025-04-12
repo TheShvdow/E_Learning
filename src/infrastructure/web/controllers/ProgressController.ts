@@ -28,4 +28,14 @@ export class ProgressController {
     const result = await ProgressService.getProgress(userId, tutorialId);
     res.json(result);
   }
+
+  static async checkEnrollment(req: Request, res: Response) {
+    const userId = req.session.user?.id;
+    const tutorialId = Number(req.params.tutorialId);
+    if (!userId || !tutorialId) return res.status(400).json({ message: 'Paramètres manquants' });
+  
+    const enrolled = await ProgressService.isEnrolled(userId, tutorialId);
+    res.json({ enrolled });
+  }
+  
 }

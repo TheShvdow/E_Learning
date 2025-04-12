@@ -17,8 +17,11 @@ import progressRoutes from './infrastructure/routes/progress.routes';
 const app = express();
 
 app.use(cors({
-  origin: 'http://localhost:8000',
-  credentials: true
+  origin: 'http://localhost:3001',
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization','access-control-allow-origin'],
+  
 }));
 
 app.use(express.json());
