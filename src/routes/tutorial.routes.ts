@@ -1,7 +1,8 @@
 import { Router } from 'express';
+import { RequestHandler, Request, Response, NextFunction } from 'express';
+import upload  from '../config/multer';
 import { TutorialController } from '../controllers/tutorial.controller';
 import { isAuthenticated, hasRole } from '../middlewares/auth.middleware';
-import { RequestHandler, Request, Response, NextFunction } from 'express';
 
 const router = Router();
 
@@ -16,12 +17,20 @@ const wrap = (fn: Function): RequestHandler => {
 };
 
 router.get('/', wrap(TutorialController.getAll));
-router.get('/:id', wrap(TutorialController.getById));
+router.get('/formateur', isAuthenticated, hasRole('FORMATEUR'), wrap(TutorialController.getByFormateur));
 router.get('/formation/:formationId', wrap(TutorialController.getByFormationId));
+router.get('/:id', wrap(TutorialController.getById));
 
 
 // 🔐 Réservé au formateur
-router.post('/create', isAuthenticated, hasRole('FORMATEUR'), wrap(TutorialController.create));
+router.post(
+  '/create',
+  upload.single("photo"), // 🔥 Doit matcher le nom utilisé dans `formData.append`
+  isAuthenticated,
+  hasRole('FORMATEUR'),
+  wrap(TutorialController.create)
+);
+
 router.put('/update/:id', isAuthenticated, hasRole('FORMATEUR'), wrap(TutorialController.update));
 router.delete('/delete/:id', isAuthenticated, hasRole('FORMATEUR'), wrap(TutorialController.delete));
 

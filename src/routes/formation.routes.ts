@@ -17,11 +17,13 @@ const wrap = (fn: Function): RequestHandler => {
 
 router.get('/', wrap(FormationController.getAll));
 router.get('/:id', wrap(FormationController.getById));
+// router.get('/paginated', wrap(FormationController.getPaginated));
+
 
 // 🔐 Réservé à l'admin
-router.post('/create', isAuthenticated, hasRole('ADMIN'), wrap(FormationController.create));
-router.put('/update/:id', isAuthenticated, hasRole('ADMIN'), wrap(FormationController.update));
-router.delete('/delete/:id', isAuthenticated, hasRole('ADMIN'), wrap(FormationController.delete));
+router.post('/', isAuthenticated, hasRole('ADMIN'), wrap(FormationController.create));
+router.put('/:id', isAuthenticated, hasRole('ADMIN'), wrap(FormationController.update));
+router.delete('/:id', isAuthenticated, hasRole('ADMIN'), wrap(FormationController.delete));
 
 
 

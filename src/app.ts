@@ -10,9 +10,10 @@ import certificatRoutes from './routes/certificat.routes';
 import UserRoutes from './infrastructure/routes/user.routes';
 import { errorHandler } from './middlewares/error.middleware';
 import progressRoutes from './infrastructure/routes/progress.routes';
-
-
-
+import uploadRoutes from './infrastructure/routes/upload.routes';
+import commentairesRoutes from './infrastructure/routes/commentaire.routes';
+import reponseCommentairesRoutes from './infrastructure/routes/reponseCommentaire.routes';
+import statsRoutes from './routes/statistique.routes';
 
 const app = express();
 
@@ -41,21 +42,29 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use('/api/v1/stats', statsRoutes);
+
 // app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/formations', formationRoutes);
 app.use('/api/v1/tutorials', tutorialRoutes);
 app.use('/api/v1/cours', coursRoutes);
 app.use('/api/v1/certificats', certificatRoutes);
 
+app.use('/api/v1/uploads', uploadRoutes);
+
+// Route From Infrastructure
+app.use('/api/v1/commentaires', commentairesRoutes);
+
+// Route From Infrastructure
+app.use('/api/v1/reponseCommentaires', reponseCommentairesRoutes);
+
 // Pregess Route
 app.use('/api/v1/progress', progressRoutes);
+
+// Statistique Route
 
 // Route From Infrastructure
 app.use('/api/v1/users', UserRoutes);
 app.use(errorHandler);
-
-
-
-
 
 export default app;

@@ -40,7 +40,27 @@ export const UserService = (userRepo: IUserRepository) => ({
   
   getFullUserById: (id: string) => {
     return PrismaUserRepository.findByIdWithRelations(id);
-  }
+  },
+  findPaginated: (page: number, limit: number, search?: string) =>
+    userRepo.findPaginated(page, limit, search),
+
+  getUserById: (id: string) => userRepo.findById(id),
+
+  async updateUser(id: string, data: Partial<IUser>) {
+    const updateData = {
+      ...data,
+      role: data.role ? (data.role.toUpperCase() as Role) : undefined,
+    };
+  
+    return userRepo.update(id, updateData);
+  },
+  getDemandesFormateur: () => PrismaUserRepository.findDemandesFormateur(),
+  validerFormateur: (id: string) =>
+  PrismaUserRepository.update(id, { role: 'FORMATEUR', demandeRoleFormateur: false }),
+
+  refuserFormateur: (id: string) => PrismaUserRepository.update(id, { demandeRoleFormateur: false, etatDemande: 'REFUSEE' }),
+  getDemandesFormateurPaginated: (page: number, limit: number, search?: string) => 
+    PrismaUserRepository.findDemandesFormateurPaginated(page, limit, search),
   
   
 });

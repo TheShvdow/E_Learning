@@ -6,5 +6,4 @@ export interface ITutorial {
     photo: string;
     formationId: number;
     
-    
   }

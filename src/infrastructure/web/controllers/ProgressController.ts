@@ -22,8 +22,11 @@ export class ProgressController {
 
   static async getProgress(req: Request, res: Response) {
     const userId = req.session.user?.id;
-    const tutorialId = Number(req.params.tutorialId);
-    if (!userId || !tutorialId) return res.status(400).json({ message: 'Paramètres manquants' });
+    const tutorialId = Number(req.query.tutorialId);
+    if (!userId || isNaN(tutorialId)) {
+      return res.status(400).json({ message: 'Paramètres invalides' });
+    }
+    
 
     const result = await ProgressService.getProgress(userId, tutorialId);
     res.json(result);
@@ -37,5 +40,8 @@ export class ProgressController {
     const enrolled = await ProgressService.isEnrolled(userId, tutorialId);
     res.json({ enrolled });
   }
+  
+
+  
   
 }

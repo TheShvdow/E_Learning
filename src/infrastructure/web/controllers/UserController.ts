@@ -3,6 +3,8 @@ import { userSchema, userLoginSchema } from '../../../validators/user.validator'
 import { PrismaUserRepository } from '../../repositories/PrismaUserRepository';
 import { UserService } from '../../../core/user/UserService';
 import { UserMapper } from '../../web/mappers/UserMapper';
+import { Role } from '../../../../prisma/generated/postgres'; // Adapte le chemin si nécessaire
+
 
 
 const service = UserService(PrismaUserRepository);
@@ -68,8 +70,109 @@ export class UserController {
   if (!fullUser) return res.status(404).json({ message: 'Utilisateur non trouvé' });
 
   const dto = UserMapper.toFullDTO(fullUser);
-  res.json(dto);
+  res.json(
+    {
+      message: 'Utilisateur trouvé',
+      user: dto,
+    },
+
+  );
 }
+
+static async getPaginated(req: Request, res: Response) {
+  const page = parseInt(req.query.page as string) || 1;
+  const limit = parseInt(req.query.limit as string) || 10;
+  const search = req.query.search as string;
+
+  const { users, total } = await service.findPaginated(page, limit, search);
+  res.json({
+    users,
+    total,
+    page,
+    totalPages: Math.ceil(total / limit),
+  });
+}
+
+static async getById(req: Request, res: Response) {
+  const id = req.params.id;
+  const user = await service.getUserById(id);
+  if (!user) return res.status(404).json({ message: 'Utilisateur introuvable' });
+  res.json(user);
+}
+
+static async update(req: Request, res: Response) {
+  const id = req.params.id;
+  const data = req.body;
+  const updated = await service.updateUser(id, data);
+  res.json(updated);
+}
+
+static async getDemandesFormateur(req: Request, res: Response) {
+  const demandes = await service.getDemandesFormateur();
+  res.json(demandes);
+}
+
+static async validerFormateur(req: Request, res: Response) {
+  const { id } = req.params;
+  await service.validerFormateur(id);
+  res.json({ message: 'Utilisateur promu au rôle de FORMATEUR' });
+}
+
+static async demanderFormateur(req: Request, res: Response) {
+  const userId = req.session.user?.id;
+  const { motivation, experienceProfessionnelle, portfolioUrl, cvUrl } = req.body;
+
+  if (!userId) return res.status(401).json({ message: 'Non authentifié' });
+
+  await PrismaUserRepository.update(userId, {
+    demandeRoleFormateur: true,
+    motivationFormateur: motivation,
+    experienceProfessionnelle,
+    portfolioUrl,
+    cvUrl,
+  });
+
+  res.json({ message: 'Demande envoyée avec succès.' });
+}
+
+static async refuserFormateur(req: Request, res: Response) {
+  const { id } = req.params;
+  await service.refuserFormateur(id);
+  res.json({ message: 'Demande refusée avec succès.' });
+}
+
+static async getDemandesFormateurPaginated(req: Request, res: Response) {
+  const page = parseInt(req.query.page as string) || 1;
+  const limit = parseInt(req.query.limit as string) || 10;
+  const search = req.query.search as string;
+
+  const result = await service.getDemandesFormateurPaginated(page, limit, search);
+  res.json(result);
+}
+
+static async validerDemandeFormateur(req: Request, res: Response) {
+  const { id } = req.params;
+  await PrismaUserRepository.update(id, {
+    role: Role.FORMATEUR,
+    etatDemande: 'ACCEPTEE',
+    demandeRoleFormateur: false,
+  });
+  res.json({ message: 'Demande validée. Utilisateur promu Formateur.' });
+}
+
+static async refuserDemandeFormateur(req: Request, res: Response) {
+  const { id } = req.params;
+  await PrismaUserRepository.update(id, {
+    etatDemande: 'REFUSEE',
+    demandeRoleFormateur: false,
+  });
+  res.json({ message: 'Demande refusée.' });
+}
+
+
+
+
+
 
   
 }

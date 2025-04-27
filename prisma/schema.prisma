@@ -4,25 +4,34 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL_POSTGRES")
+  provider          = "postgresql"
+  url               = env("DATABASE_URL_POSTGRES")
+  shadowDatabaseUrl = env("DATABASE_URL_SHADOW") // ajoute cette ligne
 }
 
 model User {
-  id              String          @id @default(uuid()) @db.Uuid
-  nom             String
-  prenom          String
-  avatar          String?
-  bio             String?
-  username        String          @unique
-  email           String          @unique
-  password        String
-  role            Role            @default(APPRENANT)
-  createdAt       DateTime        @default(now())
-  certificats     Certificat[]
-  enrollments     Enrollment[]
-  coursProgresses CoursProgress[]
-  commentaires    Commentaire[]
+  id                        String               @id @default(uuid()) @db.Uuid
+  nom                       String
+  prenom                    String
+  avatar                    String?
+  bio                       String?
+  username                  String               @unique
+  email                     String               @unique
+  password                  String
+  role                      Role                 @default(APPRENANT)
+  demandeRoleFormateur      Boolean              @default(false)
+  etatDemande               String?              @default("EN_ATTENTE") // ✅ "EN_ATTENTE", "ACCEPTEE", "REFUSEE"
+  motivationFormateur       String?
+  experienceProfessionnelle String?
+  cvUrl                     String?
+  portfolioUrl              String?
+  createdAt                 DateTime             @default(now())
+  certificats               Certificat[]
+  enrollments               Enrollment[]
+  coursProgresses           CoursProgress[]
+  commentaires              Commentaire[]
+  tutorials                 Tutorial[]
+  reponsesCommentaire       ReponseCommentaire[]
 }
 
 model Formation {
@@ -38,8 +47,10 @@ model Tutorial {
   titreTuto       String
   descriptionTuto String
   photo           String
+  userId          String?       @db.Uuid
   formationId     Int
   formation       Formation     @relation(fields: [formationId], references: [id])
+  user            User?         @relation(fields: [userId], references: [id])
   cours           Cours[]
   certificats     Certificat[]
   enrollments     Enrollment[]
@@ -50,7 +61,9 @@ model Cours {
   id              Int             @id @default(autoincrement())
   titreCours      String
   content         String
-  photo           String
+  photo           String?
+  videosUrl       String?
+  ressources      Ressources[]
   tutorialId      Int
   tutorial        Tutorial        @relation(fields: [tutorialId], references: [id])
   coursProgresses CoursProgress[]
@@ -99,12 +112,33 @@ model CoursProgress {
 }
 
 model Commentaire {
-  id         Int      @id @default(autoincrement())
+  id         Int                  @id @default(autoincrement())
   contenu    String
-  userId     String   @db.Uuid
+  userId     String               @db.Uuid
   tutorialId Int
-  createdAt  DateTime @default(now())
+  createdAt  DateTime             @default(now())
+  reponses   ReponseCommentaire[]
 
   user     User     @relation(fields: [userId], references: [id])
   tutorial Tutorial @relation(fields: [tutorialId], references: [id])
+}
+
+model Ressources {
+  id            Int      @id @default(autoincrement())
+  nomRessources String
+  file          String
+  coursId       Int
+  uploadAt      DateTime @default(now())
+  cours         Cours    @relation(fields: [coursId], references: [id])
+}
+
+model ReponseCommentaire {
+  id            Int      @id @default(autoincrement())
+  contenu       String
+  userId        String   @db.Uuid
+  commentaireId Int
+  createdAt     DateTime @default(now())
+
+  user        User        @relation(fields: [userId], references: [id])
+  commentaire Commentaire @relation(fields: [commentaireId], references: [id])
 }

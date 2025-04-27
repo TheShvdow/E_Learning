@@ -127,6 +127,12 @@ exports.Prisma.UserScalarFieldEnum = {
   email: 'email',
   password: 'password',
   role: 'role',
+  demandeRoleFormateur: 'demandeRoleFormateur',
+  etatDemande: 'etatDemande',
+  motivationFormateur: 'motivationFormateur',
+  experienceProfessionnelle: 'experienceProfessionnelle',
+  cvUrl: 'cvUrl',
+  portfolioUrl: 'portfolioUrl',
   createdAt: 'createdAt'
 };
 
@@ -142,6 +148,7 @@ exports.Prisma.TutorialScalarFieldEnum = {
   titreTuto: 'titreTuto',
   descriptionTuto: 'descriptionTuto',
   photo: 'photo',
+  userId: 'userId',
   formationId: 'formationId'
 };
 
@@ -150,6 +157,7 @@ exports.Prisma.CoursScalarFieldEnum = {
   titreCours: 'titreCours',
   content: 'content',
   photo: 'photo',
+  videosUrl: 'videosUrl',
   tutorialId: 'tutorialId'
 };
 
@@ -185,6 +193,22 @@ exports.Prisma.CommentaireScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.RessourcesScalarFieldEnum = {
+  id: 'id',
+  nomRessources: 'nomRessources',
+  file: 'file',
+  coursId: 'coursId',
+  uploadAt: 'uploadAt'
+};
+
+exports.Prisma.ReponseCommentaireScalarFieldEnum = {
+  id: 'id',
+  contenu: 'contenu',
+  userId: 'userId',
+  commentaireId: 'commentaireId',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -213,7 +237,9 @@ exports.Prisma.ModelName = {
   Certificat: 'Certificat',
   Enrollment: 'Enrollment',
   CoursProgress: 'CoursProgress',
-  Commentaire: 'Commentaire'
+  Commentaire: 'Commentaire',
+  Ressources: 'Ressources',
+  ReponseCommentaire: 'ReponseCommentaire'
 };
 
 /**

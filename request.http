@@ -12,11 +12,13 @@ Content-Type: application/json
 }
 
 ### test Auth
-POST  http://localhost:8000/api/v1/users/test
+POST  http://localhost:8000/api/v1/users/login
 Content-Type: application/json
 
 {
-    "test": "test"
+   "username":"admin",
+   "password":"Passer2025"
+
 }
 
 ### test Auth
@@ -25,3 +27,40 @@ Content-Type: application/json
 
 ### tutorials + cours
 GET http://localhost:8000/api/v1/tutorials/33
+
+### test 
+GET http://localhost:8000/api/v1/users/paginated?page=1&limit=5&search=admin
+
+
+### get full data for user 
+GET http://localhost:3000/api/v1/users/me/full
+Content-Type: application/json
+
+
+### Post Tutorial
+
+POST http://localhost:8000/api/v1/commentaires/tutorial/23
+Content-Type: application/json
+
+{
+  "contenu": "Ce tutoriel est vraiment super !"
+}
+
+### get  comments
+GET http://localhost:8000/api/v1/commentaires/tutorial/23
+Content-Type: application/jsonx
+
+### reponse comment   
+POST http://localhost:8000/api/v1/reponseCommentaires
+Content-Type: application/json
+
+
+{
+    "contenu":"je suis d'accord avec toi",
+    "commentaireId": 1
+}
+
+### test demande 
+GET http://localhost:8000/api/v1/users/demandes-formateur/paginated?page=1&limit=5&search=amine
+
+

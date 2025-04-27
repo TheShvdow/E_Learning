@@ -6,7 +6,7 @@ export interface IUser {
     username: string;
     password: string;
     role : "APPRENANT" | "ADMIN" | "FORMATEUR";
-    avatar?: string;
-    bio?: string;
+    avatar?: string | null;
+    bio?: string | null ;
   }
  

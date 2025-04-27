@@ -16,7 +16,7 @@ export class UserController {
     if (!parsed.success) return res.status(400).json(parsed.error);
     const user = await userService.register(parsed.data);
     res.status(201).json(user);
-    await mailService.sendWelcomeEmail(user.email , user.username);
+    // await mailService.sendWelcomeEmail(user.email , user.username);
     
   }
 
