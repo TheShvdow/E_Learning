@@ -7,7 +7,7 @@ Content-Type: application/json
     "nom": "wade",
     "prenom": "idrissa",
     "username": "deriss",
-    "email": "derisswade@gmail.com",
+    "email": "derisswvde@gmail.com",
     "password": "Passer2025"
 }
 
@@ -16,7 +16,7 @@ POST  http://localhost:8000/api/v1/users/login
 Content-Type: application/json
 
 {
-   "username":"admin",
+   "username":"deriss",
    "password":"Passer2025"
 
 }
@@ -35,6 +35,7 @@ GET http://localhost:8000/api/v1/users/paginated?page=1&limit=5&search=admin
 ### get full data for user 
 GET http://localhost:3000/api/v1/users/me/full
 Content-Type: application/json
+Accept: application/json
 
 
 ### Post Tutorial

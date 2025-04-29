@@ -14,22 +14,35 @@ export class FormationController {
   }
 
   static async create(req: Request, res: Response) {
-    try { 
-      const existingFormation = await formationService.findByName(req.body.nomFormation);
+    try {
+      const { nomFormation, description } = req.body;
+      const photoUrl = req.file?.path; // Cloudinary retourne le lien ici
+  
+      if (!nomFormation || !description || !photoUrl) {
+        return res.status(400).json({ message: 'Tous les champs sont requis' });
+      }
+  
+      const existingFormation = await formationService.findByName(nomFormation);
       if (existingFormation) {
         return res.status(400).json({ message: 'Cette formation existe déjà' });
       }
-      const formation = await formationService.create(req.body);
+  
+      const formation = await formationService.create({
+        nomFormation,
+        description,
+        photo: photoUrl, // on enregistre l'URL de l'image dans la base
+      });
+  
       res.status(201).json({
         message: 'Formation créée avec succès',
         formation,
       });
-    }
-    catch (error) {
+    } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Erreur lors de la création de la formation' });
     }
   }
+  
 
   static async update(req: Request, res: Response) {
     try {
