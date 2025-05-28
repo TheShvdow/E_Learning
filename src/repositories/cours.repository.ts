@@ -5,23 +5,39 @@ export const coursRepository = {
     prisma.cours.findMany({
       include: {
         ressources: true,
+        tutorial: {
+          include: {
+            formation: {
+              select: {
+                id: true,
+                nomFormation: true,
+              },
+            },
+          },
+        },
+        
       },
     }),
 
-  getById: async (id: number) =>
-    prisma.cours.findUnique({
-      where: { id },
-      include: {
-        ressources: true,
-      },
-    }),
+    getById: async (id: number) =>
+      prisma.cours.findUnique({
+        where: { id },
+        include: {
+          tutorial: {
+            include: {
+              formation: true,
+            },
+          },
+        },
+      }),
+    
 
   create: async (data: any) =>
     prisma.cours.create({
       data: {
         titreCours: data.titreCours,
         content: data.content,
-        tutorialId: data.tutorialId,
+        tutorialId: Number(data.tutorialId),
         videosUrl: data.videosUrl,
         ressources: {
           create: data.ressources || [],
