@@ -18,7 +18,7 @@ import statsRoutes from './routes/statistique.routes';
 const app = express();
 
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: 'https://e-learning-frontend-jet.vercel.app',
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization','access-control-allow-origin'],
