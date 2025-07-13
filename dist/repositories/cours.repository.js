@@ -9,19 +9,33 @@ exports.coursRepository = {
     getAll: async () => prisma_1.default.cours.findMany({
         include: {
             ressources: true,
+            tutorial: {
+                include: {
+                    formation: {
+                        select: {
+                            id: true,
+                            nomFormation: true,
+                        },
+                    },
+                },
+            },
         },
     }),
     getById: async (id) => prisma_1.default.cours.findUnique({
         where: { id },
         include: {
-            ressources: true,
+            tutorial: {
+                include: {
+                    formation: true,
+                },
+            },
         },
     }),
     create: async (data) => prisma_1.default.cours.create({
         data: {
             titreCours: data.titreCours,
             content: data.content,
-            tutorialId: data.tutorialId,
+            tutorialId: Number(data.tutorialId),
             videosUrl: data.videosUrl,
             ressources: {
                 create: data.ressources || [],

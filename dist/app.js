@@ -19,7 +19,7 @@ const reponseCommentaire_routes_1 = __importDefault(require("./infrastructure/ro
 const statistique_routes_1 = __importDefault(require("./routes/statistique.routes"));
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)({
-    origin: 'http://localhost:3001',
+    origin: 'http://localhost:3000',
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization', 'access-control-allow-origin'],
